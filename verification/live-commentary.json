@@ -1,0 +1,29 @@
+{
+  "source": "live-provider-commentary",
+  "sessionId": "sesn_01VUmiEBuGuH315Psdny6Qwi",
+  "answer": "This is a local teaching experiment demonstrating a diff-scoped code review workflow, where a finding (a medium-severity notice at `src/api.ts` line 12) is prepared as a report but not yet published. The experiment illustrates four steps: binding the exact reviewed bytes, validating the schema against changed lines, rejecting stale revisions, and requiring separate authorization before publication. It is local demonstration data only \u2014 no tool was executed and no remote system was accessed.",
+  "stopReason": "end_turn",
+  "eventTypes": [
+    "session.status_running",
+    "session.thread_status_running",
+    "user.message",
+    "span.model_request_start",
+    "agent.thinking",
+    "agent.message",
+    "span.model_request_end",
+    "session.thread_status_idle",
+    "session.usage",
+    "session.status_idle"
+  ],
+  "requestUsage": [
+    {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 657,
+      "output_tokens": 135,
+      "speed": "standard"
+    }
+  ],
+  "experimentHash": "da50d6654de4f0a843d8e581a235c55eef5c1297276d3c3071f78473e4a75f9e",
+  "scope": "A real text-only model response about the local experiment. External integrations and the experiment's correctness are not certified by this response."
+}

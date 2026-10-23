@@ -1,0 +1,13 @@
+{
+  "lesson": "C59",
+  "title": "Applied Agents: Retrieval, Analysis, Documents and Review",
+  "path": "lesson-c59\\lesson-c59-app",
+  "port": 3059,
+  "scenarios": 3,
+  "state": "implemented and verified",
+  "liveScope": "text-only commentary about the local result",
+  "typecheck": true,
+  "localTests": true,
+  "browserSmoke": "passed: desktop, mobile, scenario controls, source view",
+  "liveCommentarySmoke": "passed: real text-only session reached end_turn"
+}
