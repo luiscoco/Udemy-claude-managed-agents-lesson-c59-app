@@ -42,26 +42,82 @@ CLAUDE_MANAGED_ENVIRONMENT_ID=your_environment_id
 PORT=3059
 ```
 
-## How the application was developed
+## How the app was build
 
-The browser collects inputs; the Node host validates requests; the lesson implementation produces observable evidence. The architecture page walks through the real source with numbered steps, prerequisite configuration, source filenames and code excerpts.
+### 1. Reject a review bound to a stale head
 
-### Lesson implementation
+The reviewed head must match the current head before any finding is prepared. A changed revision returns conflict rather than publishing a stale review.
 
-[src/lesson.ts](https://github.com/luiscoco/Udemy-claude-managed-agents-lesson-c59-app/blob/main/src/lesson.ts)
+Source: [src/lesson.ts](src/lesson.ts#L13)
 
 ```typescript
-  async run(input) {
-
-if(text(input,"head")!==text(input,"currentHead"))return report("conflict","The PR revision changed after review",{prepared:false},["Recheck the current repository head"]);
-const path=text(input,"path"),line=number(input,"line"),valid=path==="src/api.ts"&&[11,12,13].includes(line);
-return report(valid?"passed":"rejected",valid?"Prepared a diff-scoped report for human review":"Finding location is outside the reviewed diff",{prepared:valid,finding:valid?{path,line,severity:"medium",message:"Demonstration finding; independently review."}:null,diffHash:hash("reviewed diff bytes"),published:false},["Bind exact reviewed input bytes","Validate schema and changed-line map","Reject a stale revision","Keep publication separately authorized"]);
-
-  }
-};
+if (text(input, "head") !== text(input, "currentHead"))
+  return report(
+    "conflict",
+    "The PR revision changed after review",
+    { prepared: false },
+    ["Recheck the current repository head"],
+  );
 ```
 
-Read the architecture page for the remaining source excerpts and explanations, including input handling and optional provider behavior. The diagram describes this application, rather than implying that an external integration has been implemented.
+### 2. Validate location against the seeded diff
+
+Only the reviewed src/api.ts lines 11–13 are in scope. The prepared finding includes a severity and demonstration message, while published:false keeps human review separate from posting a comment. The sample does not fetch a real diff or verify the finding’s truth.
+
+Source: [src/lesson.ts](src/lesson.ts#L14) · selected statements
+
+```typescript
+const path = text(input, "path"),
+  line = number(input, "line"),
+  valid = path === "src/api.ts" && [11, 12, 13].includes(line);
+
+return report(
+  valid ? "passed" : "rejected",
+  valid
+    ? "Prepared a diff-scoped report for human review"
+    : "Finding location is outside the reviewed diff",
+  {
+    prepared: valid,
+    finding: valid
+      ? {
+          path,
+          line,
+          severity: "medium",
+          message: "Demonstration finding; independently review.",
+        }
+      : null,
+    diffHash: hash("reviewed diff bytes"),
+    published: false,
+  },
+  [
+    "Bind exact reviewed input bytes",
+    "Validate schema and changed-line map",
+    "Reject a stale revision",
+    "Keep publication separately authorized",
+  ],
+);
+```
+
+### Check your understanding
+
+Run **Prepare a current scoped finding** in the application. Compare the result with these scenario expectations:
+
+```json
+{
+  "input": {
+    "head": "head-1",
+    "currentHead": "head-1",
+    "path": "src/api.ts",
+    "line": 12
+  },
+  "expectedOutcome": "passed",
+  "checkEvidence": {
+    "prepared": true
+  }
+}
+```
+
+Then try **Reject a stale PR head**. Its expected outcome is `conflict`; identify the condition or evidence field that explains the difference.
 
 ## Validation
 
